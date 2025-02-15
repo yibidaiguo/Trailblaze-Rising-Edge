@@ -1,0 +1,41 @@
+{
+    "name": "ProjectEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2373f786d14518f44b0f475db77ba4de",
+        "GUID:7cb2814e6655d904f952bf240b160d11",
+        "GUID:69448af7b92c7f342b298e06a37122aa",
+        "GUID:c3d1982e3c961f74886c3cfeb2f9ad53",
+        "GUID:6c59b127fe7cee749a513f258f4ac8cd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Android",
+        "EmbeddedLinux",
+        "GameCoreScarlett",
+        "GameCoreXboxOne",
+        "iOS",
+        "LinuxStandalone64",
+        "CloudRendering",
+        "macOSStandalone",
+        "PS4",
+        "PS5",
+        "QNX",
+        "Stadia",
+        "Switch",
+        "tvOS",
+        "WSA",
+        "VisionOS",
+        "WebGL",
+        "WindowsStandalone32",
+        "WindowsStandalone64",
+        "XboxOne"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
