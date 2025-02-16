@@ -1,49 +1,4 @@
 ﻿using Unity.Netcode;
-
-public enum MessageType : byte
-{
-    None,
-
-    #region 注册登录
-    C_S_Register,
-    S_C_Register,
-    C_S_Login,
-    S_C_Login,
-    C_S_EnterGame,
-    C_S_Disonnect,
-    S_C_Disonnect,
-    #endregion
-
-    #region 聊天
-    C_S_ChatMessage,
-    S_C_ChatMessage,
-    #endregion
-
-    #region 背包和物品
-    C_S_GetBagData,
-    S_C_GetBagData,
-    C_S_BagUseItem,
-    S_C_BagUpdateItem,
-    C_S_BagSwapItem,
-    S_C_ShortcutBarUpdateItem,
-    C_S_ShortcutBarSetItem,
-    C_S_ShortcutBarSwapItem,
-    C_S_ShopBuyItem,
-    S_C_UpdateCoinCount,
-    C_S_BagSellItem,
-    C_S_CraftItem,
-    #endregion
-
-    #region 任务
-    C_S_GetTaskDatas,
-    S_C_GetTaskDatas,
-    C_S_CompleteDialogTask,
-    S_C_CompleteTask,
-    S_C_AddTask,
-    S_C_UpdateTask,
-    C_S_AddTask
-    #endregion
-}
 public enum ErrorCode : byte
 {
     None,                // 意味着成功
@@ -57,6 +12,7 @@ public enum ErrorCode : byte
 }
 
 #region 注册与登录
+[NetCodeMessageType]
 public struct C_S_Register : INetworkSerializable
 {
     public AccountInfo accountInfo;
@@ -66,6 +22,7 @@ public struct C_S_Register : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_Register : INetworkSerializable
 {
     public ErrorCode errorCode;
@@ -75,6 +32,7 @@ public struct S_C_Register : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct AccountInfo : INetworkSerializable
 {
     public string playerName;
@@ -86,6 +44,8 @@ public struct AccountInfo : INetworkSerializable
         serializer.SerializeValue(ref password);
     }
 }
+
+[NetCodeMessageType]
 public struct C_S_Login : INetworkSerializable
 {
     public AccountInfo accountInfo;
@@ -95,6 +55,7 @@ public struct C_S_Login : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_Login : INetworkSerializable
 {
     public ErrorCode errorCode;
@@ -104,6 +65,7 @@ public struct S_C_Login : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_EnterGame : INetworkSerializable
 {
     public ErrorCode errorCode; // 纯占位
@@ -113,6 +75,7 @@ public struct C_S_EnterGame : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_Disonnect : INetworkSerializable
 {
     public ErrorCode errorCode; // 纯占位
@@ -122,7 +85,7 @@ public struct C_S_Disonnect : INetworkSerializable
     }
 }
 
-
+[NetCodeMessageType]
 public struct S_C_Disonnect : INetworkSerializable
 {
     public ErrorCode errorCode;
@@ -135,7 +98,7 @@ public struct S_C_Disonnect : INetworkSerializable
 #endregion
 
 #region 聊天
-
+[NetCodeMessageType]
 public struct C_S_ChatMessage : INetworkSerializable
 {
     public string message;
@@ -145,6 +108,7 @@ public struct C_S_ChatMessage : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_ChatMessage : INetworkSerializable
 {
     public string playerName;
@@ -160,7 +124,7 @@ public struct S_C_ChatMessage : INetworkSerializable
 #endregion
 
 #region 背包与物品
-
+[NetCodeMessageType]
 public struct C_S_GetBagData : INetworkSerializable
 {
     public int dataVersion;
@@ -170,6 +134,8 @@ public struct C_S_GetBagData : INetworkSerializable
         serializer.SerializeValue(ref dataVersion);
     }
 }
+
+[NetCodeMessageType]
 public struct S_C_GetBagData : INetworkSerializable
 {
     public bool haveBagData;
@@ -192,6 +158,7 @@ public struct S_C_GetBagData : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_BagUseItem : INetworkSerializable
 {
     public int bagIndex;   // 背包中的位置
@@ -201,6 +168,7 @@ public struct C_S_BagUseItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_BagUpdateItem : INetworkSerializable
 {
     public int bagDataVersion;
@@ -234,6 +202,7 @@ public struct S_C_BagUpdateItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_BagSwapItem : INetworkSerializable
 {
     public int bagIndexA;
@@ -246,6 +215,7 @@ public struct C_S_BagSwapItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_ShortcutBarUpdateItem : INetworkSerializable
 {
     public int shortcutBarIndex;
@@ -259,6 +229,7 @@ public struct S_C_ShortcutBarUpdateItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_ShortcutBarSetItem : INetworkSerializable
 {
     public int shortcutBarIndex;
@@ -270,6 +241,7 @@ public struct C_S_ShortcutBarSetItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_ShortcutBarSwapItem : INetworkSerializable
 {
     public int shortcutBarIndexA;
@@ -281,6 +253,7 @@ public struct C_S_ShortcutBarSwapItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_ShopBuyItem : INetworkSerializable
 {
     public string itemID;
@@ -292,6 +265,7 @@ public struct C_S_ShopBuyItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_UpdateCoinCount : INetworkSerializable
 {
     public int bagDataVersion;
@@ -303,6 +277,7 @@ public struct S_C_UpdateCoinCount : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_BagSellItem : INetworkSerializable
 {
     public int bagIndex;
@@ -312,6 +287,7 @@ public struct C_S_BagSellItem : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_CraftItem : INetworkSerializable
 {
     public string targetItemName;
@@ -325,7 +301,7 @@ public struct C_S_CraftItem : INetworkSerializable
 #endregion
 
 #region 任务
-
+[NetCodeMessageType]
 public struct C_S_GetTaskDatas : INetworkSerializable
 {
     public int dataVersion;
@@ -335,6 +311,8 @@ public struct C_S_GetTaskDatas : INetworkSerializable
         serializer.SerializeValue(ref dataVersion);
     }
 }
+
+[NetCodeMessageType]
 public struct S_C_GetTaskDatas : INetworkSerializable
 {
     public bool haveData;
@@ -357,6 +335,7 @@ public struct S_C_GetTaskDatas : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_CompleteDialogTask : INetworkSerializable
 {
     public int taskIndex;
@@ -365,6 +344,8 @@ public struct C_S_CompleteDialogTask : INetworkSerializable
         serializer.SerializeValue(ref taskIndex);
     }
 }
+
+[NetCodeMessageType]
 public struct S_C_CompleteTask : INetworkSerializable
 {
     public int taskIndex;
@@ -377,6 +358,7 @@ public struct S_C_CompleteTask : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_AddTask : INetworkSerializable
 {
     public int dataVersion;
@@ -393,6 +375,7 @@ public struct S_C_AddTask : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct S_C_UpdateTask : INetworkSerializable
 {
     public int dataVersion;
@@ -411,6 +394,7 @@ public struct S_C_UpdateTask : INetworkSerializable
     }
 }
 
+[NetCodeMessageType]
 public struct C_S_AddTask : INetworkSerializable
 {
     public string taskID;
