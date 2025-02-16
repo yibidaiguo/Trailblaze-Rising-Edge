@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,9 +7,9 @@ using System.Reflection;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-public class MessageHandlerGenerator : EditorWindow
+public class MessageHandlerGenerator
 {
-    private const string GeneratedCodeFolder = "/Scripts/Common/NetCodeGenerated/";
+    private const string GeneratedCodeFolder =  "/Scripts/Common/NetCodeGenerated/";
 
     [MenuItem("Project/生成网络消息代码")]
     public static void Generate()
@@ -101,9 +102,22 @@ public class MessageHandlerGenerator : EditorWindow
         sb.AppendLine("public enum MessageType : byte");
         sb.AppendLine("{");
         sb.AppendLine("    None,");
+        
+        
+        if (!GetINetworkSerializableType(out Type networkSerializable))
+        {
+            Debug.LogError($"无法获取 INetworkSerializable 类型。");
+            return null;
+        }
 
         foreach (var structType in messageStructs)
         {
+            // 确保结构体继承自 INetworkSerializable
+            if (!networkSerializable.IsAssignableFrom(structType))
+            {
+                Debug.LogError($"该结构体没有继承自 '{structType.Name}' ，不是合法的消息结构体");
+                continue;
+            }
             sb.AppendLine($"    {structType.Name},");
         }
 
@@ -158,7 +172,7 @@ public class MessageHandlerGenerator : EditorWindow
         try
         {
             // 保存生成的文件
-            string path = Application.dataPath + GeneratedCodeFolder + fileName;
+            string path = Application.dataPath +GeneratedCodeFolder + fileName;
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, code);
             AssetDatabase.Refresh();
@@ -170,4 +184,22 @@ public class MessageHandlerGenerator : EditorWindow
             Debug.LogError($"{errorPrefix} {e.Message}");
         }
     }
+
+    private static bool GetINetworkSerializableType(out Type netMessageType)
+    {
+        // 遍历所有已加载的程序集查找 INetworkSerializable 类型
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            netMessageType = assembly.GetType("Unity.Netcode.INetworkSerializable");
+            if (netMessageType != null)
+            {
+                return true;
+            }
+        }
+
+        Debug.LogError("未找到 INetworkSerializable 类型，请确保已正确安装 Netcode For Gameobject 包。");
+        netMessageType = null;
+        return false;
+    }
 }
+#endif
