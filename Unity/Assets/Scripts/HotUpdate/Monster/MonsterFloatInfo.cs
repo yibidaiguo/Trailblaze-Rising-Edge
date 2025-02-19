@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[OnServerBuild(ComponentMode.Delete)]
 public class MonsterFloatInfo : MonoBehaviour
 {
     [SerializeField] private TextMesh nameText;

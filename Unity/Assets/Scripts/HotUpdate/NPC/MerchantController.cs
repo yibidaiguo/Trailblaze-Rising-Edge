@@ -1,4 +1,5 @@
-﻿public class MerchantController : NPCControllerBase
+﻿[OnServerBuild(ComponentMode.Delete)]
+public class MerchantController : NPCControllerBase
 {
     public override string nameKey => "商人";
 

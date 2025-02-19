@@ -1,4 +1,5 @@
-﻿public class CrafterController : NPCControllerBase
+﻿[OnServerBuild(ComponentMode.Delete)]
+public class CrafterController : NPCControllerBase
 {
     public override string nameKey => "工匠";
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
+[OnClientBuild(ComponentMode.Delete)]
 public  class MonsterSpawner : MonoBehaviour
 {
     public GameObject[] monsterPrefabs;
