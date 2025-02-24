@@ -125,7 +125,7 @@ public class UI_CraftWindow : UI_CustomWindowBase, IItemWindow
 
     private void SubmitButtonClick()
     {
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_CraftItem, new C_S_CraftItem
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_CraftItem, new C_S_CraftItem
         {
             targetItemName = targetItemConfig.name
         });

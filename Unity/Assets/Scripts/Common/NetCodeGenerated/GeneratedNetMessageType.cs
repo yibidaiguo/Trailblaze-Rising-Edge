@@ -1,4 +1,4 @@
-public enum MessageType : byte
+public enum NetMessageType : byte
 {
     None,
     C_S_Register,
@@ -30,4 +30,6 @@ public enum MessageType : byte
     S_C_AddTask,
     S_C_UpdateTask,
     C_S_AddTask,
+    C_S_ChatToAI,
+    S_C_AIAnswer,
 }

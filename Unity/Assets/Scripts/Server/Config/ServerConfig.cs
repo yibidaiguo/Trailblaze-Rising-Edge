@@ -91,7 +91,25 @@ public class ServerConfig : ConfigBase
             }
         }
     }
-
-
+#endif
+    
+    [Header("AI配置")]
+    public string aiDescriptionConfigFolderPath;
+    public Dictionary<string, AIDescriptionConfig> aIConfigDic = new ();
+    public AIKeyConfig aIKeyConfig;
+#if UNITY_EDITOR
+    [Button]
+    private void SetAIConfig()
+    {
+        string[] files = Directory.GetFiles(aiDescriptionConfigFolderPath);// 包含*.meta
+        for (int i = 0; i < files.Length; i++)
+        {
+            if (!files[i].EndsWith(".meta"))
+            {
+                AIDescriptionConfig aiConfig = AssetDatabase.LoadAssetAtPath<AIDescriptionConfig>(files[i]);
+                aIConfigDic.Add(aiConfig.AIName, aiConfig);
+            }
+        }
+    }
 #endif
 }

@@ -9,7 +9,7 @@ public class DialogConfigImporter
 {
     private static string soDirPath = "Assets/Config/Dialog";
     private static string excelDirPath = "Assets/Config/Excel/对话";
-
+    
     [MenuItem("Project/导入对话", priority = 3)]
     public static void ImprotAll()
     {
@@ -24,7 +24,7 @@ public class DialogConfigImporter
         }
         AssetDatabase.Refresh();
     }
-
+    
     private static void ImprotExcel(string excelPath)
     {
         FileInfo fileInfo = new FileInfo(excelPath);

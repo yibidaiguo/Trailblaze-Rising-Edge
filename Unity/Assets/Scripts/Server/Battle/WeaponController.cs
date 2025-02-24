@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[OnClientBuild(ComponentMode.Delete)]
+
 public class WeaponController : MonoBehaviour
 {
     #if UNITY_EDITOR || UNITY_SERVER

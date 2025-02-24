@@ -7,9 +7,9 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
 {
     public void InitTaskSystem()
     {
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetTaskDatas, OnClientGetTaskDatas);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_CompleteDialogTask, OnClientCompleteDialogTask);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_AddTask, OnClientAddTask);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_GetTaskDatas, OnClientGetTaskDatas);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_CompleteDialogTask, OnClientCompleteDialogTask);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_AddTask, OnClientAddTask);
     }
 
 
@@ -23,7 +23,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 haveData = client.playerData.taskDatas.dataVersion != message.dataVersion
             };
             if (result.haveData) result.taskDatas = client.playerData.taskDatas;
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_GetTaskDatas, result, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_GetTaskDatas, result, clientID);
         }
     }
 
@@ -75,7 +75,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         TaskData newTaskData = new TaskData { taskConfigId = nextTaskId, taskProgress = taskProgress };
         taskDatas.tasks.Add(newTaskData);
         taskDatas.AddDataVersion();
-        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_AddTask, new S_C_AddTask { dataVersion = taskDatas.dataVersion, taskData = newTaskData }, client.clientID);
+        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_AddTask, new S_C_AddTask { dataVersion = taskDatas.dataVersion, taskData = newTaskData }, client.clientID);
     }
 
 
@@ -85,7 +85,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         {
             taskDatas.AddDataVersion();
             taskDatas.tasks.RemoveAt(taskIndex);
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_CompleteTask, new S_C_CompleteTask { taskIndex = taskIndex, dataVersion = taskDatas.dataVersion }, client.clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_CompleteTask, new S_C_CompleteTask { taskIndex = taskIndex, dataVersion = taskDatas.dataVersion }, client.clientID);
         }
 
         IssuseTaskReward(taskConfig, client);
@@ -100,7 +100,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             BagData bagData = client.playerData.bagData;
             bagData.coinCount += coinTaskReward.count;
             bagData.AddDataVersion();
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount, new S_C_UpdateCoinCount { coinCount = bagData.coinCount, bagDataVersion = bagData.dataVersion }, client.clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateCoinCount, new S_C_UpdateCoinCount { coinCount = bagData.coinCount, bagDataVersion = bagData.dataVersion }, client.clientID);
         }
     }
 
@@ -118,7 +118,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 itemData = null; // 让下方发送网络消息时为null
             }
 
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem,
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem,
                 new S_C_BagUpdateItem
                 {
                     itemIndex = itemDataIndex,
@@ -153,7 +153,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     {
                         taskData.taskProgress = itemData.count;
                         taskDatas.AddDataVersion();
-                        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, client.clientID);
+                        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, client.clientID);
                     }
                 }
                 else // 现在没有这个物品，但是当前任务的进度可能不是0
@@ -162,7 +162,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     {
                         taskData.taskProgress = 0;
                         taskDatas.AddDataVersion();
-                        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, client.clientID);
+                        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, client.clientID);
                     }
                 }
             }
@@ -188,7 +188,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     else // 更新任务进度
                     {
                         taskDatas.AddDataVersion();
-                        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, clientID);
+                        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateTask, new S_C_UpdateTask { dataVersion = taskDatas.dataVersion, taskData = taskData, taskIndex = i }, clientID);
                     }
                 }
             }

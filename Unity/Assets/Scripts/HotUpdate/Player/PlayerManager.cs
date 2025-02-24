@@ -19,14 +19,14 @@ public class PlayerManager : SingletonMono<PlayerManager>
         PlayerController.SetGetWeaponFunc(GetWeapon);
         EventSystem.AddTypeEventListener<SpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.AddTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateCoinCount, OnS_C_UpdateCoinCount);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_GetTaskDatas, OnS_C_GetTaskDatas);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_CompleteTask, OnS_C_CompleteTask);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_AddTask, OnS_C_AddTask);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_UpdateTask, OnS_C_UpdateTask);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_GetBagData, OnS_C_GetBagData);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_UpdateCoinCount, OnS_C_UpdateCoinCount);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_GetTaskDatas, OnS_C_GetTaskDatas);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_CompleteTask, OnS_C_CompleteTask);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_AddTask, OnS_C_AddTask);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_UpdateTask, OnS_C_UpdateTask);
         ClientGlobal.Instance.ActiveMouse = false;
         RequestBagData();
         RequesetTaskDatas();
@@ -38,14 +38,14 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         EventSystem.RemoveTypeEventListener<SpawnPlayerEvent>(OnSpawnPlayerEvent);
         EventSystem.RemoveTypeEventListener<MouseActiveStateChangedEvent>(OnMouseActiveStateChangedEvent);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetBagData, OnS_C_GetBagData);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_UpdateCoinCount, OnS_C_UpdateCoinCount);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_GetTaskDatas, OnS_C_GetTaskDatas);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_CompleteTask, OnS_C_CompleteTask);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_AddTask, OnS_C_AddTask);
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_UpdateTask, OnS_C_UpdateTask);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_GetBagData, OnS_C_GetBagData);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_BagUpdateItem, OnS_C_UpdateItem);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_ShortcutBarUpdateItem, OnS_C_ShortcutBarUpdateItem);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_UpdateCoinCount, OnS_C_UpdateCoinCount);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_GetTaskDatas, OnS_C_GetTaskDatas);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_CompleteTask, OnS_C_CompleteTask);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_AddTask, OnS_C_AddTask);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_UpdateTask, OnS_C_UpdateTask);
     }
 
 
@@ -113,7 +113,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         // 请求网络
         int dataVersion = bagData == null ? -1 : bagData.dataVersion;
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_GetBagData, new C_S_GetBagData { dataVersion = dataVersion });
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_GetBagData, new C_S_GetBagData { dataVersion = dataVersion });
         // 等网络消息回发
     }
 
@@ -137,7 +137,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     public void UseItem(int slotIndex)
     {
         C_S_BagUseItem message = new C_S_BagUseItem { bagIndex = slotIndex };
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagUseItem, message);
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_BagUseItem, message);
     }
     private void OnS_C_UpdateItem(ulong serverID, INetworkSerializable serializable)
     {
@@ -237,7 +237,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
             return;
         }
         // 发送网络消息
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShopBuyItem,
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_ShopBuyItem,
             new C_S_ShopBuyItem { itemID = targetItemConfig.name, bagIndex = bagIndex });
     }
 
@@ -273,7 +273,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
     {
         // 请求网络
         int dataVersion = taskDatas == null ? -1 : taskDatas.dataVersion;
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_GetTaskDatas, new C_S_GetTaskDatas { dataVersion = dataVersion });
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_GetTaskDatas, new C_S_GetTaskDatas { dataVersion = dataVersion });
         // 等网络消息回发
     }
 
@@ -302,7 +302,7 @@ public class PlayerManager : SingletonMono<PlayerManager>
 
     public void CompleteDialogTask(int taskIndex)
     {
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_CompleteDialogTask, new C_S_CompleteDialogTask { taskIndex = taskIndex });
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_CompleteDialogTask, new C_S_CompleteDialogTask { taskIndex = taskIndex });
     }
 
     private void OnS_C_CompleteTask(ulong serverID, INetworkSerializable serializable)

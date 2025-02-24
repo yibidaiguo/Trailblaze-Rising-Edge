@@ -8,10 +8,10 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
 {
     public void InitLoginSystem()
     {
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Register, OnClientRegister);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Login, OnClientLogin);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_EnterGame, OnClientEnterGame);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_Disonnect, OnClientDisonnect);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_Register, OnClientRegister);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_Login, OnClientLogin);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_EnterGame, OnClientEnterGame);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_Disonnect, OnClientDisonnect);
     }
 
     // 申请注册
@@ -36,7 +36,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             CreateDefaultPlayerData(accountInfo);
         }
         // 回复客户端
-        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Register, result, clientID);
+        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_Register, result, clientID);
     }
 
     // 生成默认账号数据
@@ -104,7 +104,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 if (accountDic.TryGetValue(accountInfo.playerName, out ulong oldClientID))
                 {
                     // 通过旧客户端
-                    NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Disonnect, new S_C_Disonnect
+                    NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_Disonnect, new S_C_Disonnect
                     {
                         errorCode = ErrorCode.AccountRepeatLogin
                     }, oldClientID);
@@ -133,7 +133,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             }
         }
         // 回复客户端
-        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_Login, result, clientID);
+        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_Login, result, clientID);
     }
     // 玩家进入游戏
     private void OnClientEnterGame(ulong clientID, INetworkSerializable serializable)
@@ -172,7 +172,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         }
 
         // 回复消息
-        NetMessageManager.Instance.SendMessageToClient<S_C_Disonnect>(MessageType.S_C_Disonnect, default, clientID);
+        NetMessageManager.Instance.SendMessageToClient<S_C_Disonnect>(NetMessageType.S_C_Disonnect, default, clientID);
     }
 
     public void OnPlayerDie(PlayerServerController player)

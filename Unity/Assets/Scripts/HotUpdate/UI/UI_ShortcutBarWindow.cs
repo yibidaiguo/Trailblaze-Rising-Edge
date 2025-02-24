@@ -152,7 +152,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase, IItemWindow
         {
             int indexA = GetItemIndex(slotA);
             int indexB = GetItemIndex(slotB);
-            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSwapItem, new C_S_ShortcutBarSwapItem
+            NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_ShortcutBarSwapItem, new C_S_ShortcutBarSwapItem
             {
                 shortcutBarIndexA = indexA,
                 shortcutBarIndexB = indexB
@@ -162,7 +162,7 @@ public class UI_ShortcutBarWindow : UI_WindowBase, IItemWindow
         else if (slotB.ownerWindow is UI_BagWindow)
         {
             int indexA = GetItemIndex(slotA);
-            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
+            NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
             {
                 shortcutBarIndex = indexA,
                 bagIndex = -1

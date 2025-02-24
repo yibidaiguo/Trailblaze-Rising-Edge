@@ -33,7 +33,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         LocalizationSystem.GlobalConfig = ResSystem.LoadAsset<LocalizationConfig>("GlobalLocalizationConfig");
         ResSystem.InstantiateGameObject<NetManager>("NetworkManager").FirstInit();
         EventSystem.AddTypeEventListener<GameSceneLanunchEvent>(OnGameSceneLanunchEvent);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Disonnect, OnDisonnect);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_Disonnect, OnDisonnect);
         JKLog.Succeed("InitClient");
         EnterLoginScene();
     }
@@ -64,6 +64,7 @@ public class ClientGlobal : SingletonMono<ClientGlobal>
         UISystem.AddUIWindowData<UI_DialogWindow>(new UIWindowData(false, nameof(UI_DialogWindow), 3));
         UISystem.AddUIWindowData<UI_TaskWindow>(new UIWindowData(false, nameof(UI_TaskWindow), 2));
         UISystem.AddUIWindowData<UI_TaskGuiderWindow>(new UIWindowData(false, nameof(UI_TaskGuiderWindow), 2));
+        UISystem.AddUIWindowData<UI_DeepSeekDialog>(new UIWindowData(false, nameof(UI_DeepSeekDialog), 3));
     }
 
     private void InitNetworkSideControllerTypeDic()

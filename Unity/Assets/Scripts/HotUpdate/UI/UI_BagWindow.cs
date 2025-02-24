@@ -98,7 +98,7 @@ public class UI_BagWindow : UI_CustomWindowBase, IItemWindow
         //  内部交换
         if (slotB.ownerWindow == this)
         {
-            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSwapItem, new C_S_BagSwapItem
+            NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_BagSwapItem, new C_S_BagSwapItem
             {
                 bagIndexA = slotA.dataIndex,
                 bagIndexB = slotB.dataIndex,
@@ -110,7 +110,7 @@ public class UI_BagWindow : UI_CustomWindowBase, IItemWindow
             int shortcutBarIndex = UISystem.GetWindow<UI_ShortcutBarWindow>().GetItemIndex(slotB);
             if (shortcutBarIndex != -1)
             {
-                NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
+                NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_ShortcutBarSetItem, new C_S_ShortcutBarSetItem
                 {
                     shortcutBarIndex = shortcutBarIndex,
                     bagIndex = slotA.dataIndex,
@@ -125,7 +125,7 @@ public class UI_BagWindow : UI_CustomWindowBase, IItemWindow
                 UISystem.Show<UI_MessagePopupWindow>().ShowMessageByLocalzationKey(ErrorCode.UsedWeaponCannotSell.ToString(), Color.yellow);
                 return;
             }
-            NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_BagSellItem, new C_S_BagSellItem
+            NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_BagSellItem, new C_S_BagSellItem
             {
                 bagIndex = slotA.dataIndex,
             });

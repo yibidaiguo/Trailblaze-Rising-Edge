@@ -17,7 +17,7 @@ public class ClientGameSceneManager : MonoBehaviour
         UI_LoadingWindow loadingWindow = UISystem.Show<UI_LoadingWindow>();
         loadingWindow.Set("Loading...");
         // 申请进入游戏
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_EnterGame, default(C_S_EnterGame));
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_EnterGame, default(C_S_EnterGame));
         float progress = 0;
         loadingWindow.UpdateProgress(progress, 100);
         yield return CoroutineTool.WaitForFrame();

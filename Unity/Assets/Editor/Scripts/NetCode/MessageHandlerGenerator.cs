@@ -22,7 +22,7 @@ public class MessageHandlerGenerator
         Type netMessageType = null;
         foreach (Assembly assembly in assemblies)
         {
-            netMessageType = assembly.GetType("MessageType");
+            netMessageType = assembly.GetType("NetMessageType");
             if (netMessageType != null)
             {
                 break;
@@ -31,7 +31,7 @@ public class MessageHandlerGenerator
 
         if (netMessageType == null)
         {
-            Debug.LogError("未能找到 MessageType 枚举类型。");
+            Debug.LogError("未能找到 NetMessageType 枚举类型。");
             return;
         }
 
@@ -90,16 +90,16 @@ public class MessageHandlerGenerator
 
         // 生成 NetMessageType 枚举代码
         var messageTypeCode = GenerateMessageTypeEnum(messageStructs);
-        Debug.Log("生成 MessageType 枚举代码:");
+        Debug.Log("生成 NetMessageType 枚举代码:");
         Debug.Log(messageTypeCode);
 
-        SaveGeneratedCode(messageTypeCode, "GeneratedMessageType.cs", "MessageType enum 生成成功!", "生成 NetMessageType 枚举失败: ");
+        SaveGeneratedCode(messageTypeCode, "GeneratedNetMessageType.cs", "MessageType enum 生成成功!", "生成 NetMessageType 枚举失败: ");
     }
 
     private static string GenerateMessageTypeEnum(List<Type> messageStructs)
     {
         var sb = new StringBuilder();
-        sb.AppendLine("public enum MessageType : byte");
+        sb.AppendLine("public enum NetMessageType : byte");
         sb.AppendLine("{");
         sb.AppendLine("    None,");
         

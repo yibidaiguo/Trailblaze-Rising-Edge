@@ -29,12 +29,12 @@ public class UI_LoginWindow : UI_CustomWindowBase
         GameSetting gameSetting = ClientGlobal.Instance.gameSetting;
         nameInputField.text = gameSetting.remerberPlayerName != null ? gameSetting.remerberPlayerName : "";
         passwordInputField.text = gameSetting.remerberpassword != null ? gameSetting.remerberpassword : "";
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Login, OnS_C_Login);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_Login, OnS_C_Login);
     }
     public override void OnClose()
     {
         base.OnClose();
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_Login, OnS_C_Login);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_Login, OnS_C_Login);
     }
 
     private void CloseButtonClick()
@@ -61,7 +61,7 @@ public class UI_LoginWindow : UI_CustomWindowBase
             ClientGlobal.Instance.RemerberAccount(nameInputField.text, passwordInputField.text);
         }
 
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_Login, new C_S_Login
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_Login, new C_S_Login
         {
             accountInfo = new AccountInfo
             {

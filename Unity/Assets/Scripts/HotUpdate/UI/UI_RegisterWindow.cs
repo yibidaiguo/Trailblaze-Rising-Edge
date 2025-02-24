@@ -27,13 +27,13 @@ public class UI_RegisterWindow : UI_CustomWindowBase
         submitButton.interactable = false;
         passwordInputField.text = "";
         rePasswordInputField.text = "";
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_Register, OnS_C_Register);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_Register, OnS_C_Register);
     }
 
     public override void OnClose()
     {
         base.OnClose();
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_Register, OnS_C_Register);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_Register, OnS_C_Register);
     }
 
     private void CloseButtonClick()
@@ -56,7 +56,7 @@ public class UI_RegisterWindow : UI_CustomWindowBase
     private void SubmitButtonClick()
     {
         submitButton.interactable = false;
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_Register, new C_S_Register
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_Register, new C_S_Register
         {
             accountInfo = new AccountInfo
             {

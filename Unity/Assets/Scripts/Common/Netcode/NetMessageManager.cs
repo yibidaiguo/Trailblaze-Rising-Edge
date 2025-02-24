@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
+using UnityEngine;
 
 public partial class NetMessageManager : SingletonMono<NetMessageManager>
 {
     private CustomMessagingManager messagingManager => NetManager.Instance.CustomMessagingManager;
-    private Dictionary<MessageType, Action<ulong, INetworkSerializable>> receiveMessageCallbackDic = new();
+    private Dictionary<NetMessageType, Action<ulong, INetworkSerializable>> receiveMessageCallbackDic = new();
 
     partial void OnInit();
     public void Init()
@@ -18,58 +19,58 @@ public partial class NetMessageManager : SingletonMono<NetMessageManager>
     //收发消息，自动生成
     partial void ReceiveMessage(ulong clientId, FastBufferReader reader);
 
-    private FastBufferWriter WriteData<T>(MessageType messageType, T data) where T : INetworkSerializable
+    private FastBufferWriter WriteData<T>(NetMessageType netMessageType, T data) where T : INetworkSerializable
     {
         // 默认1024字节，当不足时候会在10240范围内自动扩容
         FastBufferWriter writer = new FastBufferWriter(1024, Allocator.Temp, 10240);
         using (writer)
         {
-            writer.WriteValueSafe(messageType); // 协议头
+            writer.WriteValueSafe(netMessageType); // 协议头
             writer.WriteValueSafe(data);    // 协议主体
         }
         return writer;
     }
 
-    public void SendMessageToServer<T>(MessageType messageType, T data) where T : INetworkSerializable
+    public void SendMessageToServer<T>(NetMessageType netMessageType, T data) where T : INetworkSerializable
     {
-        messagingManager.SendUnnamedMessage(NetManager.ServerClientId, WriteData(messageType, data));
+        messagingManager.SendUnnamedMessage(NetManager.ServerClientId, WriteData(netMessageType, data));
     }
-    public void SendMessageToClient<T>(MessageType messageType, T data, ulong clientID) where T : INetworkSerializable
+    public void SendMessageToClient<T>(NetMessageType netMessageType, T data, ulong clientID) where T : INetworkSerializable
     {
-        messagingManager.SendUnnamedMessage(clientID, WriteData(messageType, data));
+        messagingManager.SendUnnamedMessage(clientID, WriteData(netMessageType, data));
     }
-    public void SendMessageToClients<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable
+    public void SendMessageToClients<T>(NetMessageType netMessageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable
     {
-        messagingManager.SendUnnamedMessage(clientIDS, WriteData(messageType, data));
+        messagingManager.SendUnnamedMessage(clientIDS, WriteData(netMessageType, data));
     }
-    public void SendMessageAllClient<T>(MessageType messageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable
+    public void SendMessageAllClient<T>(NetMessageType netMessageType, T data, IReadOnlyList<ulong> clientIDS) where T : INetworkSerializable
     {
-        messagingManager.SendUnnamedMessageToAll(WriteData(messageType, data));
+        messagingManager.SendUnnamedMessageToAll(WriteData(netMessageType, data));
     }
 
 
-    public void RegisterMessageCallback(MessageType messageType, Action<ulong, INetworkSerializable> callback)
+    public void RegisterMessageCallback(NetMessageType netMessageType, Action<ulong, INetworkSerializable> callback)
     {
-        if (receiveMessageCallbackDic.ContainsKey(messageType))
+        if (receiveMessageCallbackDic.ContainsKey(netMessageType))
         {
-            receiveMessageCallbackDic[messageType] += callback;
+            receiveMessageCallbackDic[netMessageType] += callback;
         }
         else
         {
-            receiveMessageCallbackDic.Add(messageType, callback);
+            receiveMessageCallbackDic.Add(netMessageType, callback);
         }
     }
-    public void UnRegisterMessageCallback(MessageType messageType, Action<ulong, INetworkSerializable> callback)
+    public void UnRegisterMessageCallback(NetMessageType netMessageType, Action<ulong, INetworkSerializable> callback)
     {
-        if (receiveMessageCallbackDic.ContainsKey(messageType))
+        if (receiveMessageCallbackDic.ContainsKey(netMessageType))
         {
-            receiveMessageCallbackDic[messageType] -= callback;
+            receiveMessageCallbackDic[netMessageType] -= callback;
         }
     }
 
-    private void TriggerMessageCallback(MessageType messageType, ulong clientID, INetworkSerializable data)
+    private void TriggerMessageCallback(NetMessageType netMessageType, ulong clientID, INetworkSerializable data)
     {
-        if (receiveMessageCallbackDic.TryGetValue(messageType, out Action<ulong, INetworkSerializable> callback))
+        if (receiveMessageCallbackDic.TryGetValue(netMessageType, out Action<ulong, INetworkSerializable> callback))
         {
             callback?.Invoke(clientID, data);
         }

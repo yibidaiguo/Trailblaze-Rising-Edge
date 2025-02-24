@@ -406,4 +406,29 @@ public struct C_S_AddTask : INetworkSerializable
 }
 #endregion
 
+#region AI消息
+[NetCodeMessageType]
+public struct C_S_ChatToAI : INetworkSerializable
+{
+    public string npcName;
+    public string message;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref npcName);
+        serializer.SerializeValue(ref message);
+    }
+}
+
+[NetCodeMessageType]
+public struct S_C_AIAnswer : INetworkSerializable
+{
+    public string message;
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    {
+        serializer.SerializeValue(ref message);
+    }
+}
+
+
+#endregion
 

@@ -8,7 +8,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
 {
     public void InitChatSystem()
     {
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ChatMessage, OnClientChatMessage);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_ChatMessage, OnClientChatMessage);
     }
 
     // 当客户端发来聊天消息
@@ -23,7 +23,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             S_C_ChatMessage message = new S_C_ChatMessage { playerName = sourceClient.playerData.name, message = chatMessage };
             foreach (Client client in clients)
             {
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ChatMessage, message, client.clientID);
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ChatMessage, message, client.clientID);
             }
         }
     }

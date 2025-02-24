@@ -27,7 +27,7 @@ public class UI_ChatWindow : UI_CustomWindowBase
     public override void OnShow()
     {
         base.OnShow();
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.S_C_ChatMessage, OnChatMessage);
     }
 
     private void OnChatMessage(ulong serverID, INetworkSerializable serializable)
@@ -54,7 +54,7 @@ public class UI_ChatWindow : UI_CustomWindowBase
     {
         if (string.IsNullOrWhiteSpace(content)) return; // 避免发送纯空格
         // 发送聊天消息
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_ChatMessage, new C_S_ChatMessage
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_ChatMessage, new C_S_ChatMessage
         {
             message = content
         });
@@ -101,7 +101,7 @@ public class UI_ChatWindow : UI_CustomWindowBase
     public override void OnClose()
     {
         base.OnClose();
-        NetMessageManager.Instance.UnRegisterMessageCallback(MessageType.S_C_ChatMessage, OnChatMessage);
+        NetMessageManager.Instance.UnRegisterMessageCallback(NetMessageType.S_C_ChatMessage, OnChatMessage);
         PoolSystem.ClearGameObject(nameof(UI_ChatWindowItem));
     }
 }

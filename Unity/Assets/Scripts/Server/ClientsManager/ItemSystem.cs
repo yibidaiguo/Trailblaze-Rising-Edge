@@ -8,14 +8,14 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
     public void InitItemSystem()
     {
         PlayerController.SetGetWeaponFunc(GetWeapon);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_GetBagData, OnClientGetBagData);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagUseItem, OnClientBagUseItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSwapItem, OnClientBagSwapItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSetItem, OnClientShortcutBarSetItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_ShopBuyItem, OnClientShopBuyItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_BagSellItem, OnClientBagSellItem);
-        NetMessageManager.Instance.RegisterMessageCallback(MessageType.C_S_CraftItem, OnClientCraftItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_GetBagData, OnClientGetBagData);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_BagUseItem, OnClientBagUseItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_BagSwapItem, OnClientBagSwapItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_ShortcutBarSetItem, OnClientShortcutBarSetItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_ShortcutBarSwapItem, OnClientShortcutBarSwapItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_ShopBuyItem, OnClientShopBuyItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_BagSellItem, OnClientBagSellItem);
+        NetMessageManager.Instance.RegisterMessageCallback(NetMessageType.C_S_CraftItem, OnClientCraftItem);
 
     }
 
@@ -30,7 +30,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 haveBagData = client.playerData.bagData.dataVersion != message.dataVersion
             };
             if (result.haveBagData) result.bagData = client.playerData.bagData;
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_GetBagData, result, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_GetBagData, result, clientID);
         }
     }
     // 当客户端请求使用物品
@@ -55,7 +55,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 itemType = newItemType,
                 usedWeapon = newItemType == ItemType.Weapon
             };
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, result, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem, result, clientID);
 
             if (originalType == ItemType.Weapon) // 更新角色的实际武器
             {
@@ -117,8 +117,8 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 itemType = itemBType,
                 usedWeapon = bagData.usedWeaponIndex == message.bagIndexB,
             };
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultA, clientID);
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, resultB, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem, resultA, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem, resultB, clientID);
 
             // 也许会涉及到快捷键的修改，也就是A或者B原本是一个快捷键
             if (bagData.TryGetShortcutBarIndex(message.bagIndexA, out int shortcutAIndex))
@@ -130,7 +130,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     bagIndex = message.bagIndexB,
                     bagDataVersion = bagData.dataVersion
                 };
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
             }
             if (bagData.TryGetShortcutBarIndex(message.bagIndexB, out int shortcutBIndex))
             {
@@ -141,7 +141,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     bagIndex = message.bagIndexA,
                     bagDataVersion = bagData.dataVersion
                 };
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, shortcutBarUpdateItem, clientID);
             }
             if (shortcutAIndex != -1)
             {
@@ -176,7 +176,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     bagIndex = -1,
                     bagDataVersion = bagData.dataVersion
                 };
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result1, clientID);
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, result1, clientID);
             }
             // 设置修改后的快捷键
             bagData.UpdateShortcutBarItem(message.shortcutBarIndex, message.bagIndex);
@@ -187,7 +187,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 bagIndex = message.bagIndex,
                 bagDataVersion = bagData.dataVersion
             };
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
         }
     }
 
@@ -207,7 +207,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 bagIndex = bagData.shortcutBarIndes[message.shortcutBarIndexA],
                 bagDataVersion = bagData.dataVersion
             };
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result1, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, result1, clientID);
 
             bagData.AddDataVersion();
             S_C_ShortcutBarUpdateItem result2 = new S_C_ShortcutBarUpdateItem
@@ -216,7 +216,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 bagIndex = bagData.shortcutBarIndes[message.shortcutBarIndexB],
                 bagDataVersion = bagData.dataVersion
             };
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_ShortcutBarUpdateItem, result2, clientID);
         }
     }
 
@@ -239,7 +239,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             {
                 bagData.AddDataVersion();
                 // 回复客户端增加物品
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem,
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem,
                     new S_C_BagUpdateItem
                     {
                         itemIndex = message.bagIndex,
@@ -252,7 +252,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                 // 回复客户端金币更新
                 bagData.coinCount -= itemConfig.price;
                 bagData.AddDataVersion();
-                NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount,
+                NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateCoinCount,
                     new S_C_UpdateCoinCount
                     {
                         bagDataVersion = bagData.dataVersion,
@@ -279,7 +279,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             // 销毁物品
             bagData.RemoveItem(message.bagIndex);
             bagData.AddDataVersion();
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem,
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem,
                 new S_C_BagUpdateItem
                 {
                     itemIndex = message.bagIndex,
@@ -297,7 +297,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             }
             bagData.coinCount += (itemConfig.price / 2) * itemCount;
             bagData.AddDataVersion();
-            NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_UpdateCoinCount,
+            NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_UpdateCoinCount,
                 new S_C_UpdateCoinCount
                 {
                     bagDataVersion = bagData.dataVersion,
@@ -338,7 +338,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                         if (containUsedWeapon && itemIndex == bagData.usedWeaponIndex) continue;
                         bagData.RemoveItem(itemIndex, item.Value);
                         bagData.AddDataVersion();
-                        NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
+                        NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
                         {
                             itemIndex = itemIndex,
                             bagDataVersion = bagData.dataVersion,
@@ -357,7 +357,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
                     }
 
                     bagData.AddDataVersion();
-                    NetMessageManager.Instance.SendMessageToClient(MessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
+                    NetMessageManager.Instance.SendMessageToClient(NetMessageType.S_C_BagUpdateItem, new S_C_BagUpdateItem
                     {
                         itemIndex = updateItemIndex,
                         bagDataVersion = bagData.dataVersion,

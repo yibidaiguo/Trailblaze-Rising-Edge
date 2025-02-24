@@ -80,10 +80,16 @@ public abstract class NPCControllerBase : MonoBehaviour
     {
         window.AddOption(nameKey, MainInteraction);
         window.AddOption("对话", StartDialog);
+        window.AddOption("AI对话", OpenAIWindow);
         if (!string.IsNullOrEmpty(taskID) && !PlayerManager.Instance.taskDatas.Contain(taskID))
         {
             window.AddOption("任务", TakeTask);
         }
+    }
+
+    private void OpenAIWindow()
+    {
+        UISystem.Show<UI_DeepSeekDialog>().Show(PlayerManager.Instance.PlayerName, nameKey,defaultDialogConfig);
     }
 
     protected void StartDialog()
@@ -114,7 +120,7 @@ public abstract class NPCControllerBase : MonoBehaviour
     protected abstract void MainInteraction();
     private void TakeTask()
     {
-        NetMessageManager.Instance.SendMessageToServer(MessageType.C_S_AddTask, new C_S_AddTask
+        NetMessageManager.Instance.SendMessageToServer(NetMessageType.C_S_AddTask, new C_S_AddTask
         {
             taskID = taskID
         });

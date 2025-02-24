@@ -24,6 +24,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
         InitChatSystem();
         InitItemSystem();
         InitTaskSystem();
+        InitAISystem();
     }
 
     private void SetClientState(ulong clientID, ClientState newState)
@@ -57,6 +58,7 @@ public partial class ClientsManager : SingletonMono<ClientsManager>
             client.playerData = null;
             client.playerController = null;
             client.OnDestroy();
+            SavePlayerData(client);
         }
     }
 
